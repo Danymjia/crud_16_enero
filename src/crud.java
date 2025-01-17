@@ -30,28 +30,16 @@ public class crud {
         leerBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                JFrame frame = new JFrame("Ejemplo de JTable");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-                String[] columnas = {"Nombre", "Correo", "Edad"};
-
-                Object[][] datos = {
-                        {"Juan Pérez", "juan@example.com", 30},
-                        {"Ana López", "ana@example.com", 25},
-                        {"Carlos García", "carlos@example.com", 35}
-                };
-
-                DefaultTableModel model = new DefaultTableModel(datos, columnas);
-
+                JFrame resultFrame = new JFrame("Usuarios");
+                metodosCRUD mC = new metodosCRUD();
+                DefaultTableModel model = mC.leerUsuario();
                 JTable tabla = new JTable(model);
-
                 JScrollPane scrollPane = new JScrollPane(tabla);
 
-                frame.add(scrollPane);
-
-                frame.setSize(600, 400);
-                frame.setVisible(true);
+                resultFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                resultFrame.add(scrollPane);
+                resultFrame.setSize(600, 400);
+                resultFrame.setVisible(true);
             }
         });
         actualizarBtn.addActionListener(new ActionListener() {

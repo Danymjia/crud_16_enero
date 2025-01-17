@@ -3,6 +3,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class metodosCRUD {
 
@@ -24,22 +26,33 @@ public class metodosCRUD {
     }}
 
     //Metodo para leer usuarios
-    public void leerUsuario(DefaultTableModel model){
-
+    public DefaultTableModel leerUsuario() {
         String query = "SELECT * FROM usuarios";
-        try(Connection con = conexion.getConnection();
-            PreparedStatement ps = con.prepareStatement(query)){
-            ResultSet rs = ps.executeQuery();
+        try (Connection con = conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+             ResultSet rs = ps.executeQuery();
 
-                while (rs.next()) {
-                    String nombre = rs.getString("nombre");
-                    String correo = rs.getString("correo");
-                    int edad = rs.getInt("edad");
+             List<Object[]> datosList = new ArrayList<>();
+             String[] columnas = {"Nombre", "Correo", "Edad"};
 
-                    }
+             while (rs.next()) {
+                 String nombre = rs.getString("nombre");
+                 String correo = rs.getString("correo");
+                 int edad = rs.getInt("edad");
 
-        }catch (Exception e){
+                 datosList.add(new Object[]{nombre, correo, edad});
+             }
+
+            Object[][] datos = new Object[datosList.size()][columnas.length];
+            for (int i = 0; i < datosList.size(); i++) {
+                datos[i] = datosList.get(i);
+            }
+
+            return new DefaultTableModel(datos, columnas);
+
+        } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -61,7 +74,6 @@ public class metodosCRUD {
         }catch (SQLException e){
             e.printStackTrace();
         }
-
     }
 
     public void eliminarUsuario(int id){
@@ -75,8 +87,4 @@ public class metodosCRUD {
             e.printStackTrace();
         }
     }
-
-
-
-
 }
